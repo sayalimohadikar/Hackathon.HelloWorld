@@ -20,7 +20,7 @@ namespace HelloWorld.SimpleWebsite.Tests.Factory
 
         public string RootUri { get; set; }
        
-        private readonly Process _seleniumStandaloneProcess;
+        //private readonly Process _seleniumStandaloneProcess;
         private IWebHost _host;
 
         private TStartup _atlasService;
@@ -83,7 +83,7 @@ namespace HelloWorld.SimpleWebsite.Tests.Factory
                 return;
 
             _host.Dispose();
-            _seleniumStandaloneProcess?.CloseMainWindow();
+            //_seleniumStandaloneProcess?.CloseMainWindow();
         }
 
     }
