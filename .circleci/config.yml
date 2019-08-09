@@ -12,7 +12,7 @@ defaults: &defaults
     POSTGRES_DB: postgres
   docker:
     - image: 815667184744.dkr.ecr.us-east-2.amazonaws.com/atlas-build:latest
-    - image: circleci/postgres:9.6-alpine-postgis
+    - image: selenium/standalone-chrome:3.141.59-titanium
 
 version: 2
 jobs:
@@ -41,51 +41,7 @@ jobs:
           root: /home/circleci
           paths:
             - build
-
-  docker_image:
-    <<: *defaults
-    steps:
-      - setup_remote_docker
-      # Restore cache from the build job which contains the
-      # build and publish output folder that needs to be used to build the docker image
-      - restore_cache:
-          key: v1-build-out-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
-      - attach_workspace:
-          at: /home/circleci
-      - run:
-          name: "Log in to AWS ECR"
-          command: eval $(aws ecr get-login --no-include-email --region us-east-2)
-      - run:
-          name: "Build and Push Docker Image"
-          command: |
-            echo "Building image for build:$(cat workspace/build-version)"
-            docker build -t $SERVICE_NAME -f Deployment/Dockerfile .
-            docker tag "$SERVICE_NAME":latest "$SERVICE_IMAGE_NAME":latest
-            docker tag "$SERVICE_NAME":latest "$SERVICE_IMAGE_NAME":"$(cat workspace/build-version)"
-            docker push "$SERVICE_IMAGE_NAME":latest
-            docker push "$SERVICE_IMAGE_NAME":"$(cat workspace/build-version)"
-      - run:
-          name: "Build and push Helm chart"
-          command: |
-            sed -ri "s/^(\s*)(tag\s*:\s*CHANGE_TAG\s*$)/\1tag: $(cat workspace/build-version)/" ./Deployment/$SERVICE_NAME/values.yaml
-            export AWS_DEFAULT_REGION=us-east-1
-            helm repo add mediware s3://mediware.platform/helm-charts
-            helm package --version "$(cat workspace/build-version)" ./Deployment/$SERVICE_NAME
-            helm s3 push ./$SERVICE_NAME-"$(cat workspace/build-version)".tgz mediware
             
-  deploy:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: /home/circleci
-      - run:
-          name: "Deploy Image to k8s Cluster"
-          command: |
-            aws s3api get-object --bucket mediware.platform --key development/keys/k8sDevKubeconfig kubeconfig
-            export KUBECONFIG=$(pwd)/kubeconfig
-            kubectl --namespace="$K8S_NAMESPACE" set image deployment "$SERVICE_NAME" "$SERVICE_NAME"="$SERVICE_IMAGE_NAME":"$(cat workspace/build-version)"
-            
-
 
 workflows:
   version: 2
@@ -93,16 +49,5 @@ workflows:
   build-deploy:
     jobs:
       - build_proj
-      - docker_image:
-          requires:
-            - build_proj
-          filters:
-            branches:
-              only: master
-      - deploy:
-          requires:
-            - docker_image
-          filters:
-            branches:
-              only: master
 
+      
