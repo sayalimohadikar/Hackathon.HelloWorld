@@ -1,0 +1,12 @@
+apiVersion: v1
+name: hello-world-simple-website
+description: HelloWorld.SimpleWebsite
+keywords:
+  - sample
+home: https://github.com/mediwareinc/HelloWorld.SimpleWebsite
+sources:
+  - https://github.com/mediwareinc/HelloWorld.SimpleWebsite
+maintainers:
+  - name: Your Name
+    email: Your.Name@wellsky.com
+tillerVersion: ">=2.9.0"

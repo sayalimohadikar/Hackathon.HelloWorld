@@ -1,0 +1,33 @@
+﻿@page
+@using HelloWorld.SimpleWebsite.Controllers
+
+<head>
+    <title>WellSky Hackathon 2019</title>
+    <style>
+        .button {
+            background-color: #1c87c9;
+            border: none;
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <div class="mdc-card mdc-card--outlined card-fixed-height">
+            <div class="row">
+                <div class="col-md-3">
+                    <h1>WellSky Hackathon 2019</h1>
+                    <br/>
+                    <a href="https://cnn.com/" class="button" id="@SimpleWebsiteController.HackButtonId">Click To be Hacked !!</a>
+                </div>
+            </div>
+        </div>
+    </center>
+</body>

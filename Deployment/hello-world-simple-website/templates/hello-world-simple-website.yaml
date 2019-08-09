@@ -1,0 +1,59 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.global.nameSpace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          -name: APP_NAME
+          value: {{ .Values.global.appName | quote }}
+          -name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.global.aspNetCoreEnv | quote }}
+          -name: K8S_NAMESPACE
+          value: {{ .Values.global.nameSpace | quote }}
+        volumeMounts:
+        - name: appsettings
+          mountPath: /app/settings
+        - name: secrets
+          mountPath: /app/secrets
+          readOnly: true
+      volumes:
+        - name: appsettings
+          configMap:
+            name: {{ .Values.app.appsettings }}
+        - name: secrets
+          secret:
+            secretName: {{ .Values.app.secrets }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.global.nameSpace }}
+spec:
+  ports:
+    - name: http
+      port: {{.Values.service.port}}
+      targetPort: {{.Values.service.port}}
+  selector:
+    app: {{ .Chart.Name }}
+  type: {{.Values.service.type}}
+---
+{{- define "hello-world-simple-website.ingress" }}
+      - path: /api/v1/sample/*
+        backend:
+          serviceName: hello-world-simple-website
+          servicePort: 80
+{{- end }}

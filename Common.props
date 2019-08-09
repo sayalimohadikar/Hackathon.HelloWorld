@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <PackageId>HelloWorld.SimpleWebsite</PackageId>
+    <Title>HelloWorld.SimpleWebsite</Title>
+    <Authors>WellSky</Authors>
+    <Owners>WellSky</Owners>
+    <PackageVersion>0.0.0.999</PackageVersion>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright 2019 (c) WellSky</Copyright>
+    <Description>HelloWorld.SimpleWebsite</Description>
+    <PackageTags></PackageTags>
+  </PropertyGroup>
+</Project>

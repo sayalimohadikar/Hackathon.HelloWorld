@@ -1,0 +1,22 @@
+# Default values for HelloWorld.SimpleWebsite
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+appName: SET_APPNAME
+aspNetCoreEnv: SET_ENVIRONMENT
+nameSpace: CHANGE_NAMESPACE
+replicaCount: 1
+strategy: Recreate
+
+app:
+  secrets: app-secrets
+  appsettings: appsettings-svc-discovery
+
+image:
+  name: 815667184744.dkr.ecr.us-east-2.amazonaws.com/hello-world-simple-website
+  tag: CHANGE_TAG
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
