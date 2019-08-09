@@ -14,6 +14,8 @@ defaults: &defaults
     - image: 815667184744.dkr.ecr.us-east-2.amazonaws.com/atlas-build:latest
     - image: selenium/standalone-chrome:3.141.59-titanium
 
+
+
 version: 2
 jobs:
   build_proj:
@@ -50,4 +52,3 @@ workflows:
     jobs:
       - build_proj
 
-      
