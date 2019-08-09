@@ -61,7 +61,8 @@ namespace HelloWorld.SimpleWebsite.Tests.Factory
 
         protected override IWebHostBuilder CreateWebHostBuilder()
         {
-            return new WebHostBuilder().UseAtlasWeb(_atlasService, null);
+            var cli = new CommandLineInfoMock();
+            return new WebHostBuilder().UseAtlasWeb(_atlasService, cli);
         }
 
         protected override TestServer CreateServer(IWebHostBuilder builder)
